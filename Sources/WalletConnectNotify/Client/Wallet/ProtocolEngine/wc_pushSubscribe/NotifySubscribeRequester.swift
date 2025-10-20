@@ -10,7 +10,7 @@ class NotifySubscribeRequester {
     private let keyserverURL: URL
     private let identityClient: IdentityClient
     private let networkingInteractor: NetworkInteracting
-    private let kms: KeyManagementService
+    private let kms: KeyManagementUserDefaultsService
     private let logger: ConsoleLogging
     private let webDidResolver: NotifyWebDidResolver
     private let notifyConfigProvider: NotifyConfigProvider
@@ -19,7 +19,7 @@ class NotifySubscribeRequester {
          networkingInteractor: NetworkInteracting,
          identityClient: IdentityClient,
          logger: ConsoleLogging,
-         kms: KeyManagementService,
+         kms: KeyManagementUserDefaultsService,
          webDidResolver: NotifyWebDidResolver,
          notifyConfigProvider: NotifyConfigProvider
     ) {

@@ -1,37 +1,14 @@
 import Foundation
 
-public protocol KeyManagementServiceProtocol {
-    func createX25519KeyPair() throws -> AgreementPublicKey
-    func createSymmetricKey(_ topic: String) throws -> SymmetricKey
-    func setPrivateKey(_ privateKey: AgreementPrivateKey) throws
-    func setPublicKey(publicKey: AgreementPublicKey, for topic: String) throws
-    func setAgreementSecret(_ agreementSecret: AgreementKeys, topic: String) throws
-    func setSymmetricKey(_ symmetricKey: SymmetricKey, for topic: String) throws
-    func setTopic(_ topic: String, for key: String) throws
-    func getPrivateKey(for publicKey: AgreementPublicKey) throws -> AgreementPrivateKey?
-    func getAgreementSecret(for topic: String) -> AgreementKeys?
-    func getSymmetricKey(for topic: String) -> SymmetricKey?
-    func getSymmetricKeyRepresentable(for topic: String) -> Data?
-    func getPublicKey(for topic: String) -> AgreementPublicKey?
-    func getTopic(for key: String) -> String?
-    func deletePrivateKey(for publicKey: String)
-    func deleteAgreementSecret(for topic: String)
-    func deleteSymmetricKey(for topic: String)
-    func deletePublicKey(for topic: String)
-    func deleteAll() throws
-    func deleteTopic(for key: String)
-    func performKeyAgreement(selfPublicKey: AgreementPublicKey, peerPublicKey hexRepresentation: String) throws -> AgreementKeys
-}
-
-public class KeyManagementService: KeyManagementServiceProtocol {
+public class KeyManagementUserDefaultsService: KeyManagementServiceProtocol {
     enum Error: Swift.Error {
         case keyNotFound
     }
 
-    private var keychain: KeychainStorageProtocol
+    private var userDefaults: KeychainStorageProtocol
 
-    public init(keychain: KeychainStorageProtocol) {
-        self.keychain = keychain
+    public init(userDefaults: KeychainStorageProtocol) {
+        self.userDefaults = userDefaults
     }
 
     public func createX25519KeyPair() throws -> AgreementPublicKey {
@@ -47,28 +24,28 @@ public class KeyManagementService: KeyManagementServiceProtocol {
     }
 
     public func setSymmetricKey(_ symmetricKey: SymmetricKey, for topic: String) throws {
-        try keychain.add(symmetricKey, forKey: topic)
+        try userDefaults.add(symmetricKey, forKey: topic)
     }
 
     public func setPrivateKey(_ privateKey: AgreementPrivateKey) throws {
-        try keychain.add(privateKey, forKey: privateKey.publicKey.hexRepresentation)
+        try userDefaults.add(privateKey, forKey: privateKey.publicKey.hexRepresentation)
     }
 
     public func setPublicKey(publicKey: AgreementPublicKey, for topic: String) throws {
-        try keychain.add(publicKey, forKey: topic)
+        try userDefaults.add(publicKey, forKey: topic)
     }
 
     public func setAgreementSecret(_ agreementSecret: AgreementKeys, topic: String) throws {
-        try keychain.add(agreementSecret, forKey: topic)
+        try userDefaults.add(agreementSecret, forKey: topic)
     }
 
     public func setTopic(_ topic: String, for key: String) throws {
-        try keychain.add(topic, forKey: key)
+        try userDefaults.add(topic, forKey: key)
     }
 
     public func deleteTopic(for key: String) {
         do {
-            try keychain.delete(key: key)
+            try userDefaults.delete(key: key)
         } catch {
             print("Error deleting topic: \(error)")
         }
@@ -76,7 +53,7 @@ public class KeyManagementService: KeyManagementServiceProtocol {
 
     public func getSymmetricKey(for topic: String) -> SymmetricKey? {
         do {
-            return try keychain.read(key: topic) as SymmetricKey
+            return try userDefaults.read(key: topic) as SymmetricKey
         } catch {
             return nil
         }
@@ -92,8 +69,8 @@ public class KeyManagementService: KeyManagementServiceProtocol {
 
     public func getPrivateKey(for publicKey: AgreementPublicKey) throws -> AgreementPrivateKey? {
         do {
-            return try keychain.read(key: publicKey.hexRepresentation) as AgreementPrivateKey
-        } catch KeychainError.itemNotFound {
+            return try userDefaults.read(key: publicKey.hexRepresentation) as AgreementPrivateKey
+        } catch UserDefaultsError.itemNotFound {
             return nil
         } catch {
             throw error
@@ -102,7 +79,7 @@ public class KeyManagementService: KeyManagementServiceProtocol {
 
     public func getTopic(for key: String) -> String? {
         do {
-            return try keychain.read(key: key) as String
+            return try userDefaults.read(key: key) as String
         } catch {
             return nil
         }
@@ -110,7 +87,7 @@ public class KeyManagementService: KeyManagementServiceProtocol {
 
     public func getAgreementSecret(for topic: String) -> AgreementKeys? {
         do {
-            return try keychain.read(key: topic) as AgreementKeys
+            return try userDefaults.read(key: topic) as AgreementKeys
         } catch {
             return nil
         }
@@ -118,7 +95,7 @@ public class KeyManagementService: KeyManagementServiceProtocol {
 
     public func getPublicKey(for topic: String) -> AgreementPublicKey? {
         do {
-            return try keychain.read(key: topic) as AgreementPublicKey
+            return try userDefaults.read(key: topic) as AgreementPublicKey
         } catch {
             return nil
         }
@@ -126,7 +103,7 @@ public class KeyManagementService: KeyManagementServiceProtocol {
 
     public func deletePrivateKey(for publicKey: String) {
         do {
-            try keychain.delete(key: publicKey)
+            try userDefaults.delete(key: publicKey)
         } catch {
             print("Error deleting private key: \(error)")
         }
@@ -134,7 +111,7 @@ public class KeyManagementService: KeyManagementServiceProtocol {
 
     public func deleteAgreementSecret(for topic: String) {
         do {
-            try keychain.delete(key: topic)
+            try userDefaults.delete(key: topic)
         } catch {
             print("Error deleting agreement key: \(error)")
         }
@@ -142,7 +119,7 @@ public class KeyManagementService: KeyManagementServiceProtocol {
 
     public func deleteSymmetricKey(for topic: String) {
         do {
-            try keychain.delete(key: topic)
+            try userDefaults.delete(key: topic)
         } catch {
             print("Error deleting symmetric key: \(error)")
         }
@@ -150,7 +127,7 @@ public class KeyManagementService: KeyManagementServiceProtocol {
 
     public func deletePublicKey(for topic: String) {
         do {
-            try keychain.delete(key: topic)
+            try userDefaults.delete(key: topic)
         } catch {
             print("Error deleting public key: \(error)")
         }
@@ -165,7 +142,7 @@ public class KeyManagementService: KeyManagementServiceProtocol {
     }
 
     public func deleteAll() throws {
-        try keychain.deleteAll()
+        try userDefaults.deleteAll()
     }
 
     static func generateAgreementKey(from privateKey: AgreementPrivateKey, peerPublicKey hexRepresentation: String) throws -> AgreementKeys {

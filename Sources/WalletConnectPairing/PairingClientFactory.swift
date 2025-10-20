@@ -12,7 +12,7 @@ public struct PairingClientFactory {
         guard let keyValueStorage = UserDefaults(suiteName: groupIdentifier) else {
             fatalError("Could not instantiate UserDefaults for a group identifier \(groupIdentifier)")
         }
-        let keychainStorage = KeychainStorage(serviceIdentifier: "com.walletconnect.sdk", accessGroup: groupIdentifier)
+        let keychainStorage = UserDefaultsStorage(serviceIdentifier: "com.walletconnect.sdk", accessGroup: groupIdentifier)
 
         return PairingClientFactory.create(logger: logger, keyValueStorage: keyValueStorage, keychainStorage: keychainStorage, networkingClient: networkingClient, eventsClient: eventsClient)
     }
@@ -25,7 +25,7 @@ public struct PairingClientFactory {
         eventsClient: EventsClientProtocol
     ) -> PairingClient {
         let pairingStore = PairingStorage(storage: SequenceStore<WCPairing>(store: .init(defaults: keyValueStorage, identifier: PairStorageIdentifiers.pairings.rawValue)))
-        let kms = KeyManagementService(keychain: keychainStorage)
+        let kms = KeyManagementUserDefaultsService(userDefaults: keychainStorage)
         let history = RPCHistoryFactory.createForNetwork(keyValueStorage: keyValueStorage)
         let appPairService = AppPairService(networkingInteractor: networkingClient, kms: kms, pairingStorage: pairingStore)
         let walletPairService = WalletPairService(networkingInteractor: networkingClient, kms: kms, pairingStorage: pairingStore, history: history, logger: logger, eventsClient: eventsClient)

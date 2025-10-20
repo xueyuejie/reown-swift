@@ -7,7 +7,7 @@ public final class IdentityClientFactory {
         keychain: KeychainStorageProtocol,
         logger: ConsoleLogging
     ) -> IdentityClient {
-        let kms = KeyManagementService(keychain: keychain)
+        let kms = KeyManagementUserDefaultsService(userDefaults: keychain)
         let httpService = HTTPNetworkClient(host: keyserver.host!)
         let identityStorage = IdentityStorage(keychain: keychain)
         let identityNetworkService = IdentityNetworkService(httpService: httpService)

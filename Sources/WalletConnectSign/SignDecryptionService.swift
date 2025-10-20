@@ -11,7 +11,7 @@ public class SignDecryptionService {
 
     public init(groupIdentifier: String) throws {
         let keychainStorage = GroupKeychainStorage(serviceIdentifier: groupIdentifier)
-        let kms = KeyManagementService(keychain: keychainStorage)
+        let kms = KeyManagementUserDefaultsService(userDefaults: keychainStorage)
         self.serializer = Serializer(kms: kms, logger: ConsoleLogger(prefix: "🔐", loggingLevel: .off))
         guard let defaults = UserDefaults(suiteName: groupIdentifier) else {
             throw Errors.couldNotInitialiseDefaults

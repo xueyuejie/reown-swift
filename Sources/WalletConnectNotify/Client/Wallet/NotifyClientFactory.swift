@@ -37,7 +37,7 @@ public struct NotifyClientFactory {
         notifyHost: String,
         explorerHost: String
     ) -> NotifyClient {
-        let kms = KeyManagementService(keychain: keychainStorage)
+        let kms = KeyManagementUserDefaultsService(userDefaults: keychainStorage)
         let notifyAccountProvider = NotifyAccountProvider()
         let database = NotifyDatabase(sqlite: sqlite, logger: logger)
         let notifyStorage = NotifyStorage(database: database, accountProvider: notifyAccountProvider)

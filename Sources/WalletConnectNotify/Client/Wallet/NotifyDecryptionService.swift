@@ -16,7 +16,7 @@ public class NotifyDecryptionService {
 
     public init(groupIdentifier: String) {
         let keychainStorage = GroupKeychainStorage(serviceIdentifier: groupIdentifier)
-        let kms = KeyManagementService(keychain: keychainStorage)
+        let kms = KeyManagementUserDefaultsService(userDefaults: keychainStorage)
         let logger = ConsoleLogger(prefix: "🔐", loggingLevel: .off)
         let sqlite = NotifySqliteFactory.create(appGroup: groupIdentifier)
         self.serializer = Serializer(kms: kms, logger: logger)

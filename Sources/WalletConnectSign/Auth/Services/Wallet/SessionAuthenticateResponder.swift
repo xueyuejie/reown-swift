@@ -4,7 +4,7 @@ import Combine
 actor SessionAuthenticateResponder {
 
     private let networkingInteractor: NetworkInteracting
-    private let kms: KeyManagementService
+    private let kms: KeyManagementUserDefaultsService
     private let verifyContextStore: CodableStore<VerifyContext>
     private let logger: ConsoleLogging
     private let walletErrorResponder: WalletErrorResponder
@@ -17,7 +17,7 @@ actor SessionAuthenticateResponder {
     init(
         networkingInteractor: NetworkInteracting,
         logger: ConsoleLogging,
-        kms: KeyManagementService,
+        kms: KeyManagementUserDefaultsService,
         verifyContextStore: CodableStore<VerifyContext>,
         walletErrorResponder: WalletErrorResponder,
         pairingRegisterer: PairingRegisterer,

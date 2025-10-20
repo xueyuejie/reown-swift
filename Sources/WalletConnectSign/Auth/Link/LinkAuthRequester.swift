@@ -7,7 +7,7 @@ actor LinkAuthRequester {
         case walletLinkSupportNotProven
     }
     private let appMetadata: AppMetadata
-    private let kms: KeyManagementService
+    private let kms: KeyManagementUserDefaultsService
     private let logger: ConsoleLogging
     private let iatProvader: IATProvider
     private let authResponseTopicRecordsStore: CodableStore<AuthResponseTopicRecord>
@@ -15,7 +15,7 @@ actor LinkAuthRequester {
     private let linkModeLinksStore: CodableStore<Bool>
     private let eventsClient: EventsClientProtocol
 
-    init(kms: KeyManagementService,
+    init(kms: KeyManagementUserDefaultsService,
          appMetadata: AppMetadata,
          logger: ConsoleLogging,
          iatProvader: IATProvider,

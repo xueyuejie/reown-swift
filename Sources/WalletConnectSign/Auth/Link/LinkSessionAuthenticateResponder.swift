@@ -6,7 +6,7 @@ actor LinkSessionAuthenticateResponder {
         case missingPeerUniversalLink
     }
     private let linkEnvelopesDispatcher: LinkEnvelopesDispatcher
-    private let kms: KeyManagementService
+    private let kms: KeyManagementUserDefaultsService
     private let logger: ConsoleLogging
     private let metadata: AppMetadata
     private let util: ApproveSessionAuthenticateUtil
@@ -17,7 +17,7 @@ actor LinkSessionAuthenticateResponder {
     init(
         linkEnvelopesDispatcher: LinkEnvelopesDispatcher,
         logger: ConsoleLogging,
-        kms: KeyManagementService,
+        kms: KeyManagementUserDefaultsService,
         metadata: AppMetadata,
         approveSessionAuthenticateUtil: ApproveSessionAuthenticateUtil,
         walletErrorResponder: WalletErrorResponder,

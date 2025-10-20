@@ -6,7 +6,7 @@ class ApproveSessionAuthenticateUtil {
         case malformedAuthRequestParams
     }
 
-    private let kms: KeyManagementService
+    private let kms: KeyManagementUserDefaultsService
     private let messageFormatter: SIWEFromCacaoFormatting
     private let signatureVerifier: MessageVerifier
     private let networkingInteractor: NetworkInteracting
@@ -19,7 +19,7 @@ class ApproveSessionAuthenticateUtil {
 
     init(
         logger: ConsoleLogging,
-        kms: KeyManagementService,
+        kms: KeyManagementUserDefaultsService,
         rpcHistory: RPCHistory,
         signatureVerifier: MessageVerifier,
         messageFormatter: SIWEFromCacaoFormatting,

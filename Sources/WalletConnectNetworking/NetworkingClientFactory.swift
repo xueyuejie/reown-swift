@@ -17,7 +17,7 @@ public struct NetworkingClientFactory {
     }
 
     public static func create(relayClient: RelayClient, logger: ConsoleLogging, keychainStorage: KeychainStorageProtocol, keyValueStorage: KeyValueStorage, kmsLogger: ConsoleLogging = ConsoleLogger(prefix: "🔐", loggingLevel: .off)) -> NetworkingInteractor {
-        let kms = KeyManagementService(keychain: keychainStorage)
+        let kms = KeyManagementUserDefaultsService(userDefaults: keychainStorage)
 
         let serializer = Serializer(kms: kms, logger: kmsLogger)
 
