@@ -12,7 +12,7 @@ public struct NetworkingClientFactory {
             fatalError("Could not instantiate UserDefaults for a group identifier \(groupIdentifier)")
         }
 
-        let keychainStorage = KeychainStorage(serviceIdentifier: "com.walletconnect.sdk", accessGroup: groupIdentifier)
+        let keychainStorage = UserDefaultsStorage(serviceIdentifier: "com.walletconnect.sdk", accessGroup: groupIdentifier)
         return NetworkingClientFactory.create(relayClient: relayClient, logger: logger, keychainStorage: keychainStorage, keyValueStorage: keyValueStorage)
     }
 

@@ -12,7 +12,7 @@ public struct PushClientFactory {
         guard let keyValueStorage = UserDefaults(suiteName: groupIdentifier) else {
             fatalError("Could not instantiate UserDefaults for a group identifier \(groupIdentifier)")
         }
-        let keychainStorage = KeychainStorage(serviceIdentifier: "com.walletconnect.sdk", accessGroup: groupIdentifier)
+        let keychainStorage = UserDefaultsStorage(serviceIdentifier: "com.walletconnect.sdk", accessGroup: groupIdentifier)
         
         return PushClientFactory.create(
             projectId: projectId,
