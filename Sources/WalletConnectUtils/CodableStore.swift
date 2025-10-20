@@ -20,11 +20,15 @@ public final class CodableStore<T> where T: Codable {
     public func set(_ item: T, forKey key: String) {
         // This force-unwrap is safe because T are JSON Encodable
         let encoded = try! JSONEncoder().encode(item)
+        
+        debugPrint("存储key:" + getContextPrefixedKey(for: key))
         defaults.set(encoded, forKey: getContextPrefixedKey(for: key))
         storeUpdatePublisherSubject.send()
     }
 
     public func get(key: String) throws -> T? {
+        
+        debugPrint("获取key:" + getContextPrefixedKey(for: key))
         guard let data = defaults.object(forKey: getContextPrefixedKey(for: key)) as? Data else { return nil }
         let item = try JSONDecoder().decode(T.self, from: data)
         return item
