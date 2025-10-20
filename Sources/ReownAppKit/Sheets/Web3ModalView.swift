@@ -25,6 +25,7 @@ struct Web3ModalView: View {
             EmptyView()
         case .connectWallet:
             ConnectWalletView()
+//            SelectWalletView()
         case .allWallets:
             if #available(iOS 14.0, *) {
                 AllWalletsView()
