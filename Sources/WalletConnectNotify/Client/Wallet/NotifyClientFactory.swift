@@ -5,8 +5,11 @@ public struct NotifyClientFactory {
     public static func create(projectId: String, groupIdentifier: String, networkInteractor: NetworkInteracting, pushClient: PushClient, crypto: CryptoProvider, notifyHost: String, explorerHost: String) -> NotifyClient {
         let logger = ConsoleLogger(prefix: "🔔",loggingLevel: .debug)
         let keyserverURL = URL(string: "https://keys.walletconnect.com")!
-        let keychainStorage = KeychainStorage(serviceIdentifier: "com.walletconnect.sdk", accessGroup: groupIdentifier)
-        let groupKeychainService = GroupKeychainStorage(serviceIdentifier: groupIdentifier)
+        
+        let userDefaultsStorage = UserDefaultsStorage(serviceIdentifier: "com.walletconnect.sdk", accessGroup: groupIdentifier)
+        let groupKeychainService = GroupUserDefaultsStorage(serviceIdentifier: groupIdentifier)
+//        let keychainStorage = KeychainStorage(serviceIdentifier: "com.walletconnect.sdk", accessGroup: groupIdentifier)
+//        let groupKeychainService = GroupKeychainStorage(serviceIdentifier: groupIdentifier)
         let sqlite = NotifySqliteFactory.create(appGroup: groupIdentifier)
 
         return NotifyClientFactory.create(
@@ -14,7 +17,7 @@ public struct NotifyClientFactory {
             keyserverURL: keyserverURL,
             sqlite: sqlite,
             logger: logger,
-            keychainStorage: keychainStorage,
+            keychainStorage: userDefaultsStorage,
             groupKeychainStorage: groupKeychainService,
             networkInteractor: networkInteractor,
             pushClient: pushClient,

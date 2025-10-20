@@ -190,7 +190,8 @@ private extension NotificationService {
     }
 
     func log(_ event: String, account: Account? = nil, topic: String? = nil, message: NotifyMessage? = nil) {
-        let keychain = GroupKeychainStorage(serviceIdentifier: "group.com.walletconnect.sdk")
+        let keychain = GroupUserDefaultsStorage(serviceIdentifier: "group.com.walletconnect.sdk")
+//        let keychain = GroupKeychainStorage(serviceIdentifier: "group.com.walletconnect.sdk")
         
         guard let clientId: String = try? keychain.read(key: "clientId") else {
             return

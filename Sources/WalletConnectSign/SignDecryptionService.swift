@@ -10,7 +10,8 @@ public class SignDecryptionService {
     private let pairingStorage: PairingStorage
 
     public init(groupIdentifier: String) throws {
-        let keychainStorage = GroupKeychainStorage(serviceIdentifier: groupIdentifier)
+//        let keychainStorage = GroupKeychainStorage(serviceIdentifier: groupIdentifier)
+        let keychainStorage = GroupUserDefaultsStorage(serviceIdentifier: groupIdentifier)
         let kms = KeyManagementUserDefaultsService(userDefaults: keychainStorage)
         self.serializer = Serializer(kms: kms, logger: ConsoleLogger(prefix: "🔐", loggingLevel: .off))
         guard let defaults = UserDefaults(suiteName: groupIdentifier) else {
